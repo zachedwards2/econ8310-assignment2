@@ -1,0 +1,80 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Test Valid Model
+      id: test-valid-model
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test Valid Model
+        setup-command: pip install -r requirements.txt
+        command: python -m unittest tests/testValidModel.py
+        timeout: 3
+        max-score: 1
+    - name: Test Fitted Model
+      id: test-fitted-model
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test Fitted Model
+        setup-command: pip install -r requirements.txt
+        command: python -m unittest tests/testFittedModel.py
+        timeout: 3
+        max-score: 1
+    - name: Test Valid Predictions
+      id: test-valid-predictions
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test Valid Predictions
+        setup-command: pip install -r requirements.txt
+        command: python -m unittest tests/testValidPred.py
+        timeout: 3
+        max-score: 1
+    - name: Accuracy Check Level 1
+      id: accuracy-check-level-1
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Accuracy Check Level 1
+        setup-command: pip install -r requirements.txt
+        command: python -m unittest tests/testAccuracy1.py
+        timeout: 3
+        max-score: 2
+    - name: Accuracy Check Level 2
+      id: accuracy-check-level-2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Accuracy Check Level 2
+        setup-command: pip install -r requirements.txt
+        command: python -m unittest tests/testAccuracy2.py
+        timeout: 3
+        max-score: 2
+    - name: Accuracy Check Level 3
+      id: accuracy-check-level-3
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Accuracy Check Level 3
+        setup-command: pip install -r requirements.txt
+        command: python -m unittest tests/testAccuracy3.py
+        timeout: 3
+        max-score: 2
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST-VALID-MODEL_RESULTS: "${{steps.test-valid-model.outputs.result}}"
+        TEST-FITTED-MODEL_RESULTS: "${{steps.test-fitted-model.outputs.result}}"
+        TEST-VALID-PREDICTIONS_RESULTS: "${{steps.test-valid-predictions.outputs.result}}"
+        ACCURACY-CHECK-LEVEL-1_RESULTS: "${{steps.accuracy-check-level-1.outputs.result}}"
+        ACCURACY-CHECK-LEVEL-2_RESULTS: "${{steps.accuracy-check-level-2.outputs.result}}"
+        ACCURACY-CHECK-LEVEL-3_RESULTS: "${{steps.accuracy-check-level-3.outputs.result}}"
+      with:
+        runners: test-valid-model,test-fitted-model,test-valid-predictions,accuracy-check-level-1,accuracy-check-level-2,accuracy-check-level-3
