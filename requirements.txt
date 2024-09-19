@@ -1,0 +1,8 @@
+statsmodels 
+pandas 
+numpy 
+ipynb
+numpy
+scipy
+sklearn
+xgboost
