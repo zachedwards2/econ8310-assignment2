@@ -12,7 +12,7 @@ Your job will be to forecast whether or not an individual purchased a “meal”
 - Your code executing without errors
 - Storing your models to make predictions on new data
 - Making reasonable predictions based on the data provided
-- Forecasting a score for each team during each week
+- Forecasting whether or not each new observation is a meal
 
 To complete this assignment, your code will need to contain the following:
 1. A forecasting algorithm named `model` using the sklearn or xgboost implementation of one of the models covered in lessons 4 to 6. Your dependent variable is the `meal` variable (indicating whether or not a purchase was classified as a meal or not), and may or may not use exogenous variables from the remainder of the dataset. The training data is stored at the following URL: https://github.com/dustywhite7/Econ8310/raw/master/AssignmentData/assignment3.csv
