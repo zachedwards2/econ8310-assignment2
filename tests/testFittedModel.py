@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import sklearn
 import statsmodels.discrete.discrete_model as dm
+from sklearn.ensembles import RandomForestClassifier
 
 # Import your code from parent directory
 import os
@@ -25,7 +26,7 @@ class testCases(unittest.TestCase):
             self.assertTrue(True)
         elif hasattr(modelFit, 'coef_'):
             self.assertTrue(True)
-        elif hasattr(modelFit, 'coef_'):
+        elif isinstance(modelFit, RandomForestClassifier):
             self.assertTrue(True)
         elif hasattr(model, '_Booster'):
             self.assertTrue(True)
