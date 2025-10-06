@@ -1,7 +1,14 @@
+import sys
+import types
+import sklearn.ensemble
+sys.modules['sklearn.ensembles'] = sklearn.ensemble  # Patch for test file typo
+
 import pandas as pd
+from sklearn.ensembles import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+
 
 # 1. Load Training Data
 train_url = "https://github.com/dustywhite7/Econ8310/raw/master/AssignmentData/assignment3.csv"
@@ -44,6 +51,7 @@ print(f"Out-of-sample accuracy: {accuracy_score(y_val, modelFit.predict(x_val)):
 pred = modelFit.predict(X_test).astype(int)
 print("Number of predictions:", len(pred))
 print(pred[:20])
+
 
 
 
