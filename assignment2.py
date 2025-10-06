@@ -3,12 +3,12 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-# 1. Load training data
+# 1. Load Training Data
 train_url = "https://github.com/dustywhite7/Econ8310/raw/master/AssignmentData/assignment3.csv"
 train_data = pd.read_csv(train_url)
 
-# 2. Load the test set (1000 rows required by the unit test)
-test_url = "https://github.com/dustywhite7/Econ8310/raw/master/AssignmentData/assignment3test.csv"
+# 2. Load Test Data
+test_url = "https://raw.githubusercontent.com/dustywhite7/econ8310-assignment2/main/tests/testData.csv"
 test_data = pd.read_csv(test_url)
 
 # 3. Drop irrelevant columns
@@ -19,11 +19,12 @@ test_data = test_data.drop(columns=['DateTime'], errors='ignore')
 y = train_data['meal']
 X = train_data.drop(columns=['meal'])
 
-# 5. Encode categorical features
+# 5. Encode categorical variables consistently
 for col in X.select_dtypes(include=['object']).columns:
-    X[col] = pd.factorize(X[col])[0]
+    mapping = {cat: idx for idx, cat in enumerate(X[col].unique())}
+    X[col] = X[col].map(mapping)
     if col in test_data.columns:
-        test_data[col] = pd.factorize(test_data[col])[0]
+        test_data[col] = test_data[col].map(mapping).fillna(-1).astype(int)
 
 # 6. Align test features
 X_test = test_data[X.columns]
@@ -35,12 +36,16 @@ x_train, x_val, y_train, y_val = train_test_split(X, y, test_size=0.33, random_s
 model = DecisionTreeClassifier(max_depth=None, min_samples_leaf=5, random_state=42)
 modelFit = model.fit(x_train, y_train)
 
-# 9. Accuracy
-print("In-sample accuracy:", round(100*accuracy_score(y_train, modelFit.predict(x_train)),2), "%")
-print("Out-of-sample accuracy:", round(100*accuracy_score(y_val, modelFit.predict(x_val)),2), "%")
+# 9. Evaluate accuracy
+print(f"In-sample accuracy: {accuracy_score(y_train, modelFit.predict(x_train)):.2%}")
+print(f"Out-of-sample accuracy: {accuracy_score(y_val, modelFit.predict(x_val)):.2%}")
 
-# 10. Predictions (1000 rows)
+# 10. Generate predictions
 pred = modelFit.predict(X_test).astype(int)
+print("Number of predictions:", len(pred))
+print(pred[:20])
+
+
 
 
 
