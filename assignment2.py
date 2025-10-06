@@ -1,4 +1,4 @@
-!pip install --upgrade scikit-learn
+import sklearn
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
@@ -44,4 +44,5 @@ print("Out-of-sample accuracy:", round(100*accuracy_score(y_val, modelFit.predic
 # Predictions on test set
 pred = modelFit.predict(X_test).astype(int)
 print(pred[:30])
+
 
