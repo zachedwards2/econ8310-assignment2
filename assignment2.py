@@ -2,41 +2,42 @@ import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 
-# 1. Load Training Data
+Load Training Data
 train_url = "https://github.com/dustywhite7/Econ8310/raw/master/AssignmentData/assignment3.csv"
 train_data = pd.read_csv(train_url)
 
-# 2. Load Test Data (official 1000-row file)
+Load Test Data
 test_url = "https://github.com/dustywhite7/Econ8310/raw/master/AssignmentData/assignment3test.csv"
 test_data = pd.read_csv(test_url)
 
-# 3. Drop irrelevant columns
+Drop irrelevant columns
 train_data = train_data.drop(columns=['DateTime'], errors='ignore')
 test_data = test_data.drop(columns=['DateTime'], errors='ignore')
 
-# 4. Separate target and features
+Separate target and features
 y = train_data['meal']
 X = train_data.drop(columns=['meal'])
 
-# 5. Encode categorical variables consistently
+Encode categorical variables consistently
 for col in X.select_dtypes(include=['object']).columns:
     mapping = {cat: idx for idx, cat in enumerate(X[col].unique())}
     X[col] = X[col].map(mapping)
     if col in test_data.columns:
         test_data[col] = test_data[col].map(mapping).fillna(-1).astype(int)
 
-# 6. Align test features
+Align test features
 X_test = test_data[X.columns]
 
-# 7. Train/validation split
+Train/validation split
 x_train, x_val, y_train, y_val = train_test_split(X, y, test_size=0.33, random_state=42)
 
-# 8. Train Decision Tree
+Train Decision Tree
 model = DecisionTreeClassifier(max_depth=None, min_samples_leaf=5, random_state=42)
 modelFit = model.fit(x_train, y_train)
 
-# 9. Generate predictions (convert to list for grader)
+Predictions
 pred = modelFit.predict(X_test).astype(int).tolist()
+
 
 
 
