@@ -34,7 +34,7 @@ X_test = test_data[common_cols]
 x_train, x_val, y_train, y_val = train_test_split(X, y, test_size=0.33, random_state=42)
 
 # Train Decision Tree
-model = DecisionTreeClassifier(max_depth=5, min_samples_leaf=10, random_state=42)
+model = DecisionTreeClassifier(max_depth= None, min_samples_leaf=5, random_state=42)
 modelFit = model.fit(x_train, y_train)
 
 # Accuracy
@@ -44,5 +44,6 @@ print("Out-of-sample accuracy:", round(100*accuracy_score(y_val, modelFit.predic
 # Predictions on test set
 pred = modelFit.predict(X_test).astype(int)
 print(pred[:30])
+
 
 
